@@ -13,6 +13,8 @@ const Auth0Strategy = require("passport-auth0");
 
 require("dotenv").config();
 
+const authRouter = require('./auth');
+
 /**
  * App Variables
  */
@@ -80,6 +82,8 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((user, done) => {
     done(null, user);
 });
+
+app.use('/', authRouter);
 
 /**
  * Routes Definitions
