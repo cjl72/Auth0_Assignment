@@ -17,7 +17,7 @@ require("dotenv").config();
 
 router.get(
     "/login",
-    passport.authenticate("auth0", {
+    passport.authenticate("auth0", null, {
         scope: "openid email profile"
     }),
     (req, res) => {
@@ -26,7 +26,7 @@ router.get(
 );
 
 router.get("/callback", (req, res, next) => {
-    passport.authenticate("auth0", (err, user, info) => {
+    passport.authenticate("auth0", null,(err, user, info) => {
         if (err) {
             return next(err);
         }

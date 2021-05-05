@@ -20,7 +20,7 @@ const authRouter = require('./auth');
  */
 
 const app = express();
-const port = process.env.PORT || "8000";
+const port = process.env.PORT || "3000";
 
 /**
  * Session Configuration
@@ -94,12 +94,24 @@ app.use('/', authRouter);
  * Routes Definitions
  */
 
+const secured = (req, res, next) => {
+    if (req.user) {
+        return next();
+    }
+    req.session.returnTo = req.originalUrl;
+    res.redirect("/login");
+};
+
 app.get("/", (req, res) => {
   res.render("index", { title: "Home" });
 });
 
-app.get("/user", (req, res) => {
-  res.render("user", { title: "Profile", userProfile: { nickname: "Auth0" } });
+app.get("/user", secured, (req, res, next) => {
+    const { _raw, _json, ...userProfile } = req.user;
+    res.render("user", {
+        title: "Profile",
+        userProfile: userProfile
+    });
 });
 
 /**
